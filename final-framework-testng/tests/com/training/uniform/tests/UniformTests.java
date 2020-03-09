@@ -53,7 +53,7 @@ public class UniformTests {
 		//driver.quit();
 	}
 	
-	@Test(enabled=false)
+	@Test(enabled=false)          //disabled since the method is called in all the test cases
 	public void validLoginTest() {
 		loginPOM.sendUserName("admin");
 		loginPOM.sendPassword("admin@123");
@@ -164,7 +164,7 @@ public class UniformTests {
 	
 	//UNF_023
 	
-	@Test
+	@Test(enabled=false)
 	public void openReports_Sales_Tax() throws WebDriverException{
 		
 		try
@@ -229,27 +229,15 @@ public class UniformTests {
 		
 		if(dashboardPOM.verifyTaxReport_Table())
 		{ 
-		String result = dashboardPOM.verifySalesOrderTable_Values(1, 12);
-		  if(result.equals("No Results for specified period"))
-		  {
-			  System.out.println("No Results for specified period");
-			  screenShot.captureScreenShot("Eighth-No Results for specified period");
-		  }
+			System.out.println("Tax Report table is displayed");
+			screenShot.captureScreenShot("Eighth-Tax report table");
+			//assuming data is retrieved in the results table
 			
-		  else if(result.equals("Matching"))
-		  {
-		      System.out.println("Total number of orders and products are matching");
-		      screenShot.captureScreenShot("Eighth-Total number of orders and products are matching with expected values");
-		  }
-		  else
-		  {
-			  System.out.println("Total number of orders and products are not matching");
-			  screenShot.captureScreenShot("Eighth-Total number of orders and products are not matching with expected values");
-		  }
+		    dashboardPOM.verifyTaxReportTable_Values();
 		}
 		else
 		{
-			System.out.println("Sales Order table is not displayed correctly");
+			System.out.println("Tax Report table is not displayed correctly");
 			throw new WebDriverException();
 		}
 		}catch(WebDriverException e){
@@ -257,6 +245,87 @@ public class UniformTests {
 		}
 	}
 	
+	//UNF_024
 	
+	@Test(enabled=false)
+    public void openReports_Sales_Shipping() throws WebDriverException{
+		
+		try
+		{
+		validLoginTest();
+		dashboardPOM.hoverReportsIcon();
+		screenShot.captureScreenShot("Second-Dashboard-Reports");
+		
+		//verify Sales,Products,Customers and Marketing links are visible
+		
+		if(dashboardPOM.verifyReports_Icons())
+		{
+	     System.out.println("Sales, Products, Customers and Marketing links are visible as expected");
+	     dashboardPOM.clickSalesIcon(); 
+	     screenShot.captureScreenShot("Third-Dashboard-Reports-Sales");
+	     
+		//verify Orders,Tax,Shipping,Returns and Coupons link is visible
+	     
+		  if(dashboardPOM.verifySales_Icons())
+		   {
+			System.out.println("Orders, Tax, Shipping, Returns and Coupons links are visible as expected");
+			dashboardPOM.clickShipping();
+			System.out.println("Page title is "+driver.getTitle());
+			screenShot.captureScreenShot("Fourth-Dashboard-Reports-Shipping Report");
+		   }
+		  else
+		   {
+			System.out.println("Orders, Tax, Shipping, Returns and Coupons links are not visible as expected");
+			screenShot.captureScreenShot("Fourth-Dashboard-Reports-Shipping Report");
+			throw new WebDriverException();
+		   }
+		}
+		else
+		{
+			System.out.println("Sales, Products, Customers and Marketing links are not visible as expected");
+			screenShot.captureScreenShot("Third-Dashboard-Reports-Sales");
+			throw new WebDriverException();
+		}
+				
+		//verify shipping report is displayed
+		
+		if(dashboardPOM.verifyGroupBy_Drp_Down())
+		{
+			screenShot.captureScreenShot("Fifth-Sales Report-Group By Drop Down values");
+			dashboardPOM.selectWeeks();
+			System.out.println("Weeks is selected from the Group By drop down");
+			screenShot.captureScreenShot("Sixth-Weeks is selected from Group By Drop Down values");
+		}
+		else
+		{
+			System.out.println("Group By drop down values is not available");
+			throw new WebDriverException();
+		}
+		
+		//clicking the filter button
+		
+		dashboardPOM.clickFilterBtn();
+		System.out.println("Filter button is clicked");
+		screenShot.captureScreenShot("Seventh-Filter button is clicked");
+		
+		//verify the total tax paid for orders placed 
+		
+		if(dashboardPOM.verifyShippingReport_Table())
+		{ 
+			System.out.println("Shipping Report table is displayed");
+			screenShot.captureScreenShot("Eighth-Shipping report table");
+			//assuming data is retrieved in the results table
+			
+		    dashboardPOM.verifyShippingReportTable_Values();
+		}
+		else
+		{
+			System.out.println("Tax Report table is not displayed correctly");
+			throw new WebDriverException();
+		}
+		}catch(WebDriverException e){
+			e.printStackTrace();
+		}
+	}
 
 }

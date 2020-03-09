@@ -1,12 +1,11 @@
 package com.training.pom;
 
-
-import java.sql.Time;
 import java.util.List;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -20,7 +19,7 @@ private WebDriver driver;
 	}
 	
 
-	@FindBy(xpath="//*[@class='fa fa-bar-chart-o fa-fw']")
+	@FindBy(xpath="//ul/li/a/i[@class='fa fa-bar-chart-o fa-fw']")
 	private WebElement reports; 
 	
 	@FindBy(xpath="//*/ul/li/a[@class='parent'][child::text()='Sales']")
@@ -83,9 +82,90 @@ private WebDriver driver;
 	@FindBy(xpath="//*/tr/td[text()='Total']")
 	private WebElement total_Col;
 	
+	@FindBy(xpath="//*/tr/td[text()='Shipping Title']")
+	private WebElement shippingTitle;
 	
+	@FindBy(xpath="//ul/li/a/i[@class='fa fa-shopping-cart fa-fw']")
+	private WebElement cart;
+	
+	@FindBy(xpath="//span[text()='Sales']/following::a[text()='Orders'][1]") //indexing is used because 3 matching items were found
+	private WebElement orders;
+	
+	@FindBy(xpath="//span[text()='Sales']/following::a[text()='Recurring Orders']") //indexing is used because 3 matching items were found
+	private WebElement rec_orders;
+	
+	@FindBy(xpath="//span[text()='Sales']/following::a[text()='Returns'][1]")
+	private WebElement returns;
+	
+	@FindBy(xpath="//span[text()='Sales']/following::a[text()='Gift Vouchers'][1]")
+	private WebElement gift_vouchers;
+	
+	@FindBy(xpath="//span[text()='Sales']/following::a[text()='PayPal']")
+	private WebElement paypal;
+	
+	@FindBy(xpath="//h3[@class='panel-title'][text()=' Order List']")
+	private WebElement orderlist;
+	
+	@FindBy(xpath="//div[@class='table-responsive']//tbody/tr")
+	private List<WebElement> orderlist_table;
+	
+	@FindBy(xpath="//div[@class='table-responsive']//tbody/tr/td/a[1]") // list has all view buttons in the page
+	private List<WebElement> view_icon;
+	
+	@FindBy(xpath="//button[@id='button-invoice']")
+	private WebElement generate;
+	
+	@FindBy(xpath="//td[@id='invoice']")
+	private WebElement invoiceId;
+	
+	@FindBy(xpath="//div[@class='table-responsive']//tbody/tr/td/a[2]") // list has all edit buttons in the page
+	private List<WebElement> edit_icon;
+	
+	@FindBy(xpath="//div/button[@id='button-customer']")
+	private WebElement continue_btn;
+	
+	@FindBy(xpath="//a[text()='2. Products']")
+	private WebElement products_tab;
+	
+	@FindBy(xpath="//tbody/tr/td/button")
+	private List<WebElement> remove_btn;
+	
+	@FindBy(xpath="")
+	private WebElement chooseproduct;
+	
+	@FindBy(xpath="")
+	private WebElement quantity;
+	
+	@FindBy(xpath="")
+	private WebElement addproduct;
+	
+	@FindBy(xpath="//a[text()='3. Payment Details']")
+	private WebElement payment_tab;
+	
+	@FindBy(xpath="//a[text()='4. Shipping Details']")
+	private WebElement shipping_tab;
+	
+	@FindBy(xpath="//a[text()='5. Totals']")
+	private WebElement totals_tab;
+		
 	public void hoverReportsIcon() {
 		this.reports.click();
+	}
+	
+	public void hoverCartIcon() {
+		this.cart.click();
+	}
+	
+	public void clickCartOrders(){
+		this.orders.click();
+	}
+	
+	public void clickpaypal(){
+		this.paypal.click();
+	}
+	
+	public void clickContinue_Btn(){
+		this.continue_btn.click();
 	}
 	
 	public boolean verifyReports_Icons()
@@ -100,6 +180,32 @@ private WebDriver driver;
 					if(this.marketing.isDisplayed())
 					{
 						displayed = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			displayed =  false;
+		}
+		return displayed;
+	}
+	
+	public boolean verifyCart_Icons()
+	{
+		boolean displayed = true;
+		if(this.orders.isDisplayed())
+		{
+			if(this.rec_orders.isDisplayed())
+			{
+				if(this.returns.isDisplayed())
+				{
+					if(this.gift_vouchers.isDisplayed())
+					{
+						if(this.paypal.isDisplayed())
+						{
+						    displayed = true;
+						}
 					}
 				}
 			}
@@ -359,6 +465,34 @@ public boolean verifyTaxReport_Table(){
 		return display;
 		
 	}
+
+public boolean verifyShippingReport_Table(){
+	
+	boolean display = true;
+	
+	if(this.DateStart_col.isDisplayed())
+	{
+		if(this.DateEnd_col.isDisplayed())
+		{
+			if(this.shippingTitle.isDisplayed())
+			{
+				if(this.noOfOrders.isDisplayed())
+				{
+					if(this.total_Col.isDisplayed())
+					{
+					display = true;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		display =  false;
+	}
+	return display;
+	
+}
 	
 	public String verifySalesOrderTable_Values(int orders,int products){
 		
@@ -389,10 +523,144 @@ public boolean verifyTaxReport_Table(){
 		return result;
 	}
 	
-	public String verifyTaxReportTable_Values(int orders,int products)
+	public void verifyTaxReportTable_Values()
 	{
-		String result = null;
+		//assuming results are retrieved in the table
 		
-		return result;
+		String start_Date = this.report_Results.get(0).getText();
+		String end_Date = this.report_Results.get(1).getText();
+		String tax_Title = this.report_Results.get(2).getText();
+		int no_Orders = Integer.parseInt(this.report_Results.get(3).getText());
+		String total = this.report_Results.get(4).getText().substring(1);      //substring is used to remove to Rupee symbol from total
+		if(start_Date.equals(end_Date))
+		{
+		    System.out.println("For the date "+start_Date+" total tax paid is displayed as "+total+" for "+no_Orders+" orders at "+tax_Title);
+		}
+		else
+		{
+			System.out.println("For dates between "+start_Date+" and "+end_Date+" total tax paid is displayed as "+total+" for "+no_Orders+" orders at "+tax_Title);
+		}
+		
 	}
+	
+	public void verifyShippingReportTable_Values()
+	{
+		//assuming results are retrieved in the table
+		
+		String start_Date = this.report_Results.get(0).getText();
+		String end_Date = this.report_Results.get(1).getText();
+		String shipping_Title = this.report_Results.get(2).getText();
+		int no_Orders = Integer.parseInt(this.report_Results.get(3).getText());
+		String total = this.report_Results.get(4).getText().substring(1);      //substring is used to remove to Rupee symbol from total
+		if(start_Date.equals(end_Date))
+		{
+		    System.out.println("For the date "+start_Date+" shipping total is displayed as "+total+" for "+no_Orders+" orders at "+shipping_Title);
+		}
+		else
+		{
+			System.out.println("For dates between "+start_Date+" and "+end_Date+" shipping total is displayed as "+total+" for "+no_Orders+" orders at "+shipping_Title);
+		}
+		
+	}
+	
+	public boolean verifyOrderListTable(){
+		
+		int size = this.orderlist_table.size();
+		boolean tablecontents = true;
+		if(size>0)
+		{
+			System.out.println("Order List table is displayed with all the orders made by the users.");
+			tablecontents = true;
+		}
+		else
+		{
+			tablecontents = false;
+		}
+		return tablecontents;
+	}
+	
+	public void clickViewIcon(){
+		
+		if(verifyOrderListTable())
+		{
+			this.view_icon.get(0).click();
+			
+		}
+		else
+		{
+			System.out.println("Order List table is has no data");
+		}		
+	}
+	
+	public void clickGenerateBtn(){
+		this.generate.click();
+	}
+	
+	public String getInvoiceId(){
+		String invoice = this.invoiceId.getText();
+		return invoice;
+	}
+	
+    public void clickEditIcon(){
+		
+		if(verifyOrderListTable())
+		{
+			this.edit_icon.get(0).click();
+			
+		}
+		else
+		{
+			System.out.println("Order List table is has no data");
+		}		
+	}
+    
+    public boolean verifyProductsTab(){
+    	if(this.products_tab.isDisplayed())
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public boolean verifyPaymentDetailsTab(){
+    	if(this.payment_tab.isDisplayed())
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public boolean verifyShippingDetailsTab(){
+    	if(this.shipping_tab.isDisplayed())
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public boolean verifyTotalsTab(){
+    	if(this.totals_tab.isDisplayed())
+    		return true;
+    	else
+    		return false;
+    }
+       
+    public void clickRemoveBtn(){
+    	this.remove_btn.get(0).click();
+    }
+    
+    public void chooseProduct(String productname,String qty)
+    {
+    	this.chooseproduct.clear();
+    	this.chooseproduct.sendKeys(productname);
+    	this.quantity.clear();
+    	this.quantity.sendKeys(qty);
+   	
+    }
+    
+    public void addProduct()
+    {
+    	this.addproduct.click();
+    }
+    
+	
+	
+	
 }
