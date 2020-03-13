@@ -61,7 +61,7 @@ public class UniformTests_Medium {
 	
 	//UNF_045
 	
-	@Test
+	@Test(enabled=false)
 	public void viewOrderDetails() throws WebDriverException
 	{
 		try
@@ -92,9 +92,9 @@ public class UniformTests_Medium {
 		    	if(dashboardPOM.getInvoiceId().equals(""))
 		    	{
 		    	dashboardPOM.clickGenerateBtn();
-		    	screenShot.captureScreenShot("Five-Order-Invoice ID generated");
 		    	String invoice = dashboardPOM.getInvoiceId();
 		    	System.out.println("Invoice is generated with ID "+invoice);
+		    	screenShot.captureScreenShot("Five-Order-Invoice ID generated");
 		    	}
 		    	else
 		    	{
@@ -106,7 +106,9 @@ public class UniformTests_Medium {
 		    }
 		    else
 		    {
-		    	System.out.println("Page Title is not displayed as expected");		    	
+		    	System.out.println("Page Title is not displayed as expected");	
+		    	throw new WebDriverException();
+		    	
 		    }
 		}
 		else
@@ -125,64 +127,103 @@ public class UniformTests_Medium {
 	//UNF_046
 	
 	@Test
-	public void changeOrder_Admin(){
+	public void changeOrder_Admin() throws InterruptedException, WebDriverException{
 		
-		validLoginTest();
-		dashboardPOM.hoverCartIcon();
-		screenShot.captureScreenShot("Second-Dashboard-Shopping Cart");
-		
-		// verify Orders, Recurring Orders, Returns, Gift Vouchers and Paypal links are visible as expected
-		if(dashboardPOM.verifyCart_Icons())
-		{
-			System.out.println("Orders, Recurring Orders, Returns, Gift Vouchers and Paypal links are visible as expected");
-		    dashboardPOM.clickCartOrders();
-		    screenShot.captureScreenShot("Third-Order List");
-		    //verify page title and page contents
-		    String title = driver.getTitle();
-		    System.out.println("Page Title is "+title);
-		    if(title.equals("Orders"))
-		    {
-		    	//verify the orders are displayed in the table and click on edit button
-		    	
-		    	dashboardPOM.clickEditIcon();    //assuming that the View button on the first row is clicked
-		    	System.out.println("Edit Order page is displayed");
-		    	screenShot.captureScreenShot("Fourth-Edit Order page");
-		    	
-		    	//click on the generate icon of the invoice tab
-		    	
-		    	dashboardPOM.clickContinue_Btn();
-		    	
-		    	if(dashboardPOM.verifyProductsTab())
-		    	{
-		    		System.out.println("Products tab is displayed");
-		    		screenShot.captureScreenShot("Fifth-Edit Order-Products tab");
-		    		
-		    		//click on remove icon, assuming that remove icon on the first row is clicked
-		    		
-		    		dashboardPOM.clickRemoveBtn();
-		    		System.out.println("One product is removed from the order");
-		    		screenShot.captureScreenShot("Sixth-Edit Order-Products tab-item removed");
-		    		
-		    		//enter valid credentials in choose products textbox
-		    		dashboardPOM.chooseProduct("Blazer(II-V)", "1");
-		    		screenShot.captureScreenShot("Seventh-Edit Order-Products tab-product details entered");
-		    		dashboardPOM.addProduct();
-		    		
-		    	}
-		    	else
-		    	{
-		    		System.out.println("Products tab is not displayed");
-		    		throw new WebDriverException();
-		    	}		    	
-		    }
-		}
-		else
-		{
-			System.out.println("Orders, Recurring Orders, Returns, Gift Vouchers and Paypal links are not visible as expected");
-			throw new WebDriverException();
-		}	
-		
-		
-	}
+		try {
+			validLoginTest();
+			dashboardPOM.hoverCartIcon();
+			screenShot.captureScreenShot("Second-Dashboard-Shopping Cart");
+			
+			// verify Orders, Recurring Orders, Returns, Gift Vouchers and Paypal links are visible as expected
+			if(dashboardPOM.verifyCart_Icons())
+			{
+				System.out.println("Orders, Recurring Orders, Returns, Gift Vouchers and Paypal links are visible as expected");
+			    dashboardPOM.clickCartOrders();
+			    screenShot.captureScreenShot("Third-Order List");
+			    //verify page title and page contents
+			    String title = driver.getTitle();
+			    System.out.println("Page Title is "+title);
+			    if(title.equals("Orders"))
+			    {
+			    	//verify the orders are displayed in the table and click on edit button
+			    	
+			    	dashboardPOM.clickEditIcon();    //assuming that the Edit button on the first row is clicked
+			    	System.out.println("Edit Order page is displayed");
+			    	screenShot.captureScreenShot("Fourth-Edit Order page");
+			    	
+			    	//click on the continue button
+			    	
+			    	dashboardPOM.clickContinue_Btn();
+			    	
+			    	Thread.sleep(5000);
+			    	
+			    	if(dashboardPOM.verifyProductsTab())
+			    	{
+			    		System.out.println("Products tab is displayed");
+			    		//Thread.sleep(5000);
+			    		screenShot.captureScreenShot("Fifth-Edit Order-Products tab");
+			    		
+			    		//click on remove icon, assuming that remove icon on the first row is clicked
+			    		
+			    		dashboardPOM.clickRemoveBtn();
+			    		//Thread.sleep(5000);
+			    		System.out.println("One product is removed from the order");
+			    		screenShot.captureScreenShot("Sixth-Edit Order-Products tab-item removed");
+			    		
+			    		//enter valid credentials in choose products textbox
+			    		
+			    		dashboardPOM.chooseProduct("Blazer(II-V)", "1");
+			    		Thread.sleep(5000);
+			    		screenShot.captureScreenShot("Seventh-Edit Order-Products tab-product details entered");
+			    		dashboardPOM.addProduct();
+			    		//Thread.sleep(5000);
+			    		screenShot.captureScreenShot("Eighth-Edit Order-Products tab-New product added");
+			    		dashboardPOM.clickProductContinue_Btn();
+			    		if(dashboardPOM.verifyPaymentDetailsTab()){
+			    			screenShot.captureScreenShot("Nineth-Edit Order-Payment Details tab");
+			    			dashboardPOM.clickPaymentContinue_Btn();
+			    			if(dashboardPOM.verifyShippingDetailsTab()){
+			    				screenShot.captureScreenShot("Tenth-Edit Order-Shipping Details tab");
+			    				dashboardPOM.clickShippingContinue_Btn();
+			    				if(dashboardPOM.verifyTotalsTab()){
+			    					screenShot.captureScreenShot("Eleventh-Edit Order - Totals tab");
+			    					dashboardPOM.saveOrder();
+			    					//Thread.sleep(5000);
+			    					screenShot.captureScreenShot("Twelveth-Edit Order-Order Saved");
+			    				}
+			    				else{
+			    					System.out.println("Totals tab is not displayed as expected");
+			    					throw new WebDriverException();
+			    				}
+			    			}
+			    			else{
+			    				System.out.println("Shipping Details tab is not displayed as expected");
+			    				throw new WebDriverException();
+			    			}
+			    		}
+			    		else{
+			    			System.out.println("Payment Details tab is not displayed as expected");
+			    			throw new WebDriverException();
+			    		}
+			    		
+			    	}
+			    	else
+			    	{
+			    		System.out.println("Products tab is not displayed as expected");
+			    		throw new WebDriverException();
+			    	}		    	
+			    }
+			}
+			else
+			{
+				System.out.println("Orders, Recurring Orders, Returns, Gift Vouchers and Paypal links are not visible as expected");
+				throw new WebDriverException();
+			}
+			} catch (WebDriverException we) {
+			       we.printStackTrace();
+		    } catch (Exception e) {
+			       e.printStackTrace();		
+            }
+   }		
 
 }

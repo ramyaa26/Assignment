@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="1" total="2" passed="1">
+<testng-results skipped="0" failed="0" ignored="3" total="4" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="21629" started-at="2020-03-08T07:41:17Z" finished-at="2020-03-08T07:41:38Z">
+  <suite name="Default suite" duration-ms="28135" started-at="2020-03-13T16:31:41Z" finished-at="2020-03-13T16:32:09Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="21629" started-at="2020-03-08T07:41:17Z" finished-at="2020-03-08T07:41:38Z">
-      <class name="com.training.uniform.tests.UniformTests_Medium">
-        <test-method status="PASS" signature="setUpBeforeClass()[pri:0, instance:com.training.uniform.tests.UniformTests_Medium@457e2f02]" name="setUpBeforeClass" is-config="true" duration-ms="7" started-at="2020-03-08T13:11:17Z" finished-at="2020-03-08T13:11:17Z">
+    <test name="Default test" duration-ms="28135" started-at="2020-03-13T16:31:41Z" finished-at="2020-03-13T16:32:09Z">
+      <class name="com.training.uniform.tests.UniformTests_Complex">
+        <test-method status="PASS" signature="setUpBeforeClass()[pri:0, instance:com.training.uniform.tests.UniformTests_Complex@6767c1fc]" name="setUpBeforeClass" is-config="true" duration-ms="6" started-at="2020-03-13T22:01:41Z" finished-at="2020-03-13T22:01:41Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpBeforeClass -->
-        <test-method status="PASS" signature="setUp()[pri:0, instance:com.training.uniform.tests.UniformTests_Medium@457e2f02]" name="setUp" is-config="true" duration-ms="14613" started-at="2020-03-08T13:11:17Z" finished-at="2020-03-08T13:11:31Z">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:com.training.uniform.tests.UniformTests_Complex@6767c1fc]" name="setUp" is-config="true" duration-ms="12434" started-at="2020-03-13T22:01:41Z" finished-at="2020-03-13T22:01:54Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method status="PASS" signature="viewOrderDetails()[pri:0, instance:com.training.uniform.tests.UniformTests_Medium@457e2f02]" name="viewOrderDetails" duration-ms="5979" started-at="2020-03-08T13:11:31Z" finished-at="2020-03-08T13:11:37Z">
+        <test-method status="PASS" signature="changeOrder_Admin()[pri:0, instance:com.training.uniform.tests.UniformTests_Complex@6767c1fc]" name="changeOrder_Admin" duration-ms="14678" started-at="2020-03-13T22:01:54Z" finished-at="2020-03-13T22:02:08Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- viewOrderDetails -->
-        <test-method status="PASS" signature="tearDown()[pri:0, instance:com.training.uniform.tests.UniformTests_Medium@457e2f02]" name="tearDown" is-config="true" duration-ms="1007" started-at="2020-03-08T13:11:37Z" finished-at="2020-03-08T13:11:38Z">
+        </test-method> <!-- changeOrder_Admin -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:com.training.uniform.tests.UniformTests_Complex@6767c1fc]" name="tearDown" is-config="true" duration-ms="1001" started-at="2020-03-13T22:02:08Z" finished-at="2020-03-13T22:02:09Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- com.training.uniform.tests.UniformTests_Medium -->
+      </class> <!-- com.training.uniform.tests.UniformTests_Complex -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

@@ -105,8 +105,8 @@ public class UniformTests {
 		
 		//enter the Start Date and End Date as yyyy-mm-dd, assume 2020-02-01, Done for retrieving some valid data
 		
-		dashboardPOM.setsalesReportDateStart("20200201");
-		dashboardPOM.setsalesReportDateEnd("20200201");
+		dashboardPOM.setsalesReportDateStart("20200309");
+		dashboardPOM.setsalesReportDateEnd("20200309");
 		
 		//verify total number of orders,products details should get displayed
 		
@@ -134,7 +134,7 @@ public class UniformTests {
 		if(dashboardPOM.verifySalesOrder_Table())
 		{ 
 		String result = dashboardPOM.verifySalesOrderTable_Values(1, 12);
-		  if(result.equals("No Results for specified period"))
+		  if(result.equals("No Results"))
 		  {
 			  System.out.println("No Results for specified period");
 			  screenShot.captureScreenShot("Eighth-No Results for specified period");
